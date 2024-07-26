@@ -11,8 +11,6 @@ export type PostOutputType = {
 
 }
 
-
-
 export type PostMongoDbType =  {
     "_id": ObjectId,
     "title": string,

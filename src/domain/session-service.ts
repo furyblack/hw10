@@ -1,6 +1,6 @@
 import {SessionType, UpdateSessionType} from "../types/session/sessionType";
 import {SessionRepository} from "../repositories/session-repository";
-import {sessionCollection} from "../db/db";
+import {sessionCollection, SessionModel} from "../db/db";
 
 export class SessionService {
 
@@ -21,7 +21,7 @@ export class SessionService {
     }
 
     static async deleteSessionByDeviceId(deviceId: string): Promise<void>{
-        await sessionCollection.deleteOne({deviceId})
+        await SessionModel.deleteOne({deviceId})  // а должна ли тут быть модель или коллекция? остальные модули в репу стучатся
     }
 
     static async updateSession(data: UpdateSessionType): Promise<void> {

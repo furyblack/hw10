@@ -1,11 +1,11 @@
 import { NextFunction, Response, Request } from 'express';
 import { jwtService } from "../../application/jwt-service";
 import { UsersRepository } from "../../repositories/users-repository";
-import {requestsCountCollection, usersCollection} from "../../db/db";
+import {RequestCountModel, requestsCountCollection, UserModel, usersCollection} from "../../db/db";
 import { body } from "express-validator";
 import { inputValidationMiddleware } from "../inputValidation/input-validation-middleware";
 import {SessionService} from "../../domain/session-service";
-import {Collection} from "mongodb";
+
 
 // Middleware для базовой аутентификации
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
@@ -44,7 +44,7 @@ export const uniqEmailValidator = body("email")
     .withMessage('Email is not valid')
     .custom(async (email) => {
         // Проверяем наличие пользователя с таким email в базе данных
-        const existingUser = await usersCollection.findOne({ 'accountData.email': email });
+        const existingUser = await UserModel.findOne({ 'accountData.email': email });
         if (existingUser) {
             throw new Error("пользователь с таким email существует");
         }
@@ -63,7 +63,7 @@ export const uniqLoginValidator = body("login")
     .isLength({ min: 3, max: 10 })
     .custom(async (login) => {
         // Проверяем наличие пользователя с таким логином в базе данных
-        const existingUser = await usersCollection.findOne({ 'accountData.userName': login });
+        const existingUser = await UserModel.findOne({ 'accountData.userName': login });
         if (existingUser) {
             throw new Error("пользователь с таким login существует");
         }
@@ -76,7 +76,7 @@ export const userConfirmedValidator = body("email")
     .matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/).withMessage('Email is not Valid')
     .custom(async (email) => {
         // Ищем пользователя в базе данных по email
-        const user = await usersCollection.findOne({ 'accountData.email': email });
+        const user = await UserModel.findOne({ 'accountData.email': email });
 
         if (!user) {
             throw new Error("пользователя нет");
@@ -136,7 +136,7 @@ export const rateLimiterMiddlewave = async (req:Request, res: Response, next: Ne
     const currentTime = new Date()
     try {
         //записываем текущий request в коллекцию
-        await requestsCountCollection.insertOne({
+        await RequestCountModel.create({
             ip,
             url,
             date: currentTime
@@ -145,7 +145,7 @@ export const rateLimiterMiddlewave = async (req:Request, res: Response, next: Ne
         const windowStartTime = new Date(currentTime.getTime()-TIME_WINDOW)
 
         //считаем количество запросов за временное окно
-        const requestCount = await requestsCountCollection.countDocuments({
+        const requestCount = await RequestCountModel.countDocuments({
             ip,
             url,
             date: { $gte: windowStartTime}

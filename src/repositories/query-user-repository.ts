@@ -1,5 +1,5 @@
 import { PaginationOutputType} from "../types/blogs/output";
-import { usersCollection} from "../db/db";
+import {UserModel, usersCollection} from "../db/db";
 import {ObjectId, SortDirection, WithId} from "mongodb";
 import {UserOutputType, userSortData} from "../types/users/outputUserType";
 import {UserAccountDBType, UserMongoDbType} from "../types/users/inputUsersType";
@@ -38,15 +38,15 @@ export class UserQueryRepository {
             filter["$or"].push({})
         }
 
-        const user = await usersCollection
+        const user = await UserModel
             .find(filter)
-            .sort(sortBy, sortDirection as SortDirection)
+            .sort({ [sortBy]: sortDirection as SortDirection })
             .limit(pageSize)
             .skip((pageNumber - 1) * pageSize)
-            .toArray()
+            .lean()
 
 
-        const totalCount = await usersCollection.countDocuments(filter)
+        const totalCount = await UserModel.countDocuments(filter)
 
         return {
 
@@ -61,7 +61,7 @@ export class UserQueryRepository {
 
     }
     static async getById(id:string  ):Promise<UserOutputType | null>{
-        const currentUser= await usersCollection.findOne({_id:new ObjectId(id)})
+        const currentUser= await UserModel.findOne({_id:new ObjectId(id)})
         return currentUser? UserMapper.toDto(currentUser): null
     }
 

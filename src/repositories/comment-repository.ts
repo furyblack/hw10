@@ -1,6 +1,6 @@
 import {CommentMongoDbType, CommentOutputType} from "../types/comment/output-comment-type";
 import {ObjectId, WithId} from "mongodb";
-import {commentCollection} from "../db/db";
+import {commentCollection, CommentModel} from "../db/db";
 import {UpdateCommentType} from "../types/comment/input-comment-type";
 import {QueryCommentRepository} from "./query-comment-repository";
 
@@ -18,15 +18,15 @@ export class CommentMapper {
 export class CommentRepository {
     static async findById(commentId: string):Promise<WithId<CommentMongoDbType> | null>{
 
-        return  commentCollection.findOne({_id: new ObjectId(commentId)})
+        return  CommentModel.findOne({_id: new ObjectId(commentId)})
 
     }
 
     static async createComment(commentParams:CommentMongoDbType):Promise<{commentId: string}>{
 
-        const cteatedCommentData  = await commentCollection.insertOne(commentParams)
+        const cteatedCommentData  = await CommentModel.create(commentParams)
         return {
-            commentId: cteatedCommentData.insertedId.toString(),
+            commentId: cteatedCommentData._id.toString(),
         }
     }
 
@@ -35,7 +35,7 @@ export class CommentRepository {
         if(!post){
             return null
         }
-        const updateResult= await commentCollection.updateOne({_id: new ObjectId(commentId)},{$set:{...updateData}})
+        const updateResult= await CommentModel.updateOne({_id: new ObjectId(commentId)},{$set:{...updateData}})
         const updatedCount = updateResult.modifiedCount
         return !!updatedCount;
 
@@ -43,7 +43,7 @@ export class CommentRepository {
 
     static async deleteComment(id:string):Promise<boolean>{
         try {
-            const result = await commentCollection.deleteOne({_id: new ObjectId(id)})
+            const result = await CommentModel.deleteOne({_id: new ObjectId(id)})
             return result.deletedCount===1;
         }catch (error){
             console.error("Error deleting comment", error)

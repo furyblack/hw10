@@ -1,14 +1,14 @@
-import {sessionCollection} from "../db/db";
+import {sessionCollection, SessionModel} from "../db/db";
 
 export class QuerySessionRepository {
     static async getActiveDevises(userId:string, liveTime: number){
         const now = new Date()
         const newTime = new Date(now.getTime()-liveTime*1000)
         try {
-            const sessions = await sessionCollection.find({
+            const sessions = await SessionModel.find({
                 userId:userId,
                 lastActiveDate:{ $gt: newTime}
-            }).toArray()
+            }).lean()
             //мапим данные сессии для требуемого формата на клиент
             const formatedSessions = sessions.map(session=>({
                 ip:session.ip,
@@ -25,7 +25,7 @@ export class QuerySessionRepository {
 
     static async terminateOtherSessions(userId:string, currentDeviceId:string){
         try {
-            const result = await sessionCollection.deleteMany({
+            const result = await SessionModel.deleteMany({
                 userId:userId,
                 deviceId:{ $ne:currentDeviceId }
             });
@@ -37,7 +37,7 @@ export class QuerySessionRepository {
     }
     static async terminateSpecificSession(userId:string, deviceIdToDelete:string){
         try {
-            const result = await sessionCollection.deleteOne({
+            const result = await SessionModel.deleteOne({
                 userId:userId,
                 deviceId:deviceIdToDelete
             })
@@ -50,7 +50,7 @@ export class QuerySessionRepository {
     }
     static async findSessionByIdAndUser(deviceId:string){
         try {
-            return await sessionCollection.findOne({deviceId:deviceId})
+            return await SessionModel.findOne({deviceId:deviceId})
         }catch (error){
             console.error('error finding session',  error)
             throw new Error('database query failed')

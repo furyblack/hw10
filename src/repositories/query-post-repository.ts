@@ -1,5 +1,5 @@
 import {PostMongoDbType, PostOutputType, postSortData} from "../types/posts/output";
-import {commentCollection, postCollection} from "../db/db";
+import {commentCollection, CommentModel, postCollection, PostModel} from "../db/db";
 import {PostMapper} from "../domain/posts-service";
 import {PaginationOutputType} from "../types/blogs/output";
 import {ObjectId, SortDirection} from "mongodb";
@@ -15,14 +15,14 @@ export class QueryPostRepository {
         const search = searchNameTerm
             ? {title: {$regex: searchNameTerm, $options: 'i'}}
             : {}
-        const  post = await postCollection
+        const  post = await PostModel
             .find(search)
-            .sort(sortBy, sortDirection as SortDirection)
+            .sort({ [sortBy]: sortDirection as SortDirection })
             .limit(pageSize)
             .skip((pageNumber - 1) * pageSize)
-            .toArray()
+            .lean()
 
-        const totalCount = await postCollection.countDocuments(search)
+        const totalCount = await PostModel.countDocuments(search)
         return {
             pagesCount: Math.ceil(totalCount / pageSize),
             page: pageNumber,
@@ -35,14 +35,14 @@ export class QueryPostRepository {
     static async getAllCommentsForPost(postId:string, sortData:postSortData):Promise<PaginationOutputType<CommentOutputType[]>>{
         const {pageSize, pageNumber, sortBy, sortDirection} = sortData
         const search = {postId: postId}
-        const post = await commentCollection
+        const post = await CommentModel
             .find(search)
-            .sort(sortBy, sortDirection as SortDirection) //был вариант(sortBy as keyof BlogOutputType, sortDirection as SortDirection))
+            .sort({ [sortBy]: sortDirection as SortDirection }) //был вариант(sortBy as keyof BlogOutputType, sortDirection as SortDirection))
             .limit(pageSize)
             .skip((pageNumber - 1) * pageSize)
-            .toArray()
+            .lean()
         // подсчёт элементов (может быть вынесено во вспомогательный метод)
-        const totalCount = await commentCollection.countDocuments(search)
+        const totalCount = await CommentModel.countDocuments(search)
 
         return {
 
@@ -57,7 +57,7 @@ export class QueryPostRepository {
 
 
     static async getById(id: string): Promise<PostOutputType | null> {
-        const post: PostMongoDbType | null = await postCollection.findOne({_id: new ObjectId(id)})
+        const post: PostMongoDbType | null = await PostModel.findOne({_id: new ObjectId(id)})
         if (!post) {
             return null
         }

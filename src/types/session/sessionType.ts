@@ -1,4 +1,3 @@
-import {postSortData} from "../posts/output";
 
 export type SessionType = {
     ip: string,
@@ -7,7 +6,6 @@ export type SessionType = {
     deviceId: string,
     userId: string
 }
-
 
 export type JwtPayload = {
     userId: string,
@@ -19,8 +17,6 @@ export type UpdateSessionType ={
     lastActiveDate: Date;
     deviceId: string;
 }
-
-
 
 export type requestCountType = {
     ip: string,

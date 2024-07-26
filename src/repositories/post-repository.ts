@@ -1,4 +1,4 @@
-import {postCollection} from "../db/db";
+import {postCollection, PostModel} from "../db/db";
 import {CreateNewPostType, UpdatePostType} from "../types/posts/input";
 import {PostMongoDbType, PostOutputType} from "../types/posts/output";
 import {QueryPostRepository} from "./query-post-repository";
@@ -35,10 +35,10 @@ export class PostRepository{
             blogName: targetBlog.name,
             createdAt: new Date()
         } as unknown as PostMongoDbType
-        await postCollection.insertOne(newPost)
 
-
-        return PostMapper.toDto(newPost)
+        const newPostToDb = new PostModel(newPost)
+        await newPostToDb.save()
+        return PostMapper.toDto({...newPost, _id:newPostToDb._id})
     }
 
 
@@ -47,7 +47,7 @@ export class PostRepository{
         if(!post){
             return null
         }
-        const updateResult = await postCollection.updateOne({_id: new ObjectId(postId)}, {$set:{...updateData}})
+        const updateResult = await PostModel.updateOne({_id: new ObjectId(postId)}, {$set:{...updateData}})
         const updatedCount = updateResult.modifiedCount
         return Boolean(updatedCount);
 
@@ -55,7 +55,7 @@ export class PostRepository{
 
     static async deletePost(id: string): Promise<boolean>{
         try{
-            const result = await postCollection.deleteOne({_id: new ObjectId(id)})
+            const result = await PostModel.deleteOne({_id: new ObjectId(id)})
             return result.deletedCount === 1;
         }catch (error){
             console.error("Error deleting post", error)
@@ -65,8 +65,6 @@ export class PostRepository{
     }
 
     static async findPostById(postId:string):Promise<WithId<PostMongoDbType>|null>{
-        return postCollection.findOne({_id: new ObjectId(postId)})
+        return PostModel.findOne({_id: new ObjectId(postId)})
     }
-
-
 }

@@ -18,11 +18,10 @@ export class PostMapper{
 }
 
 export class PostService{
-    //TODO вынести мапинг в квери репу
+
     static async createPost(postParams: CreateNewPostType): Promise<PostOutputType | null>{
      return await PostRepository.createPost(postParams)
     }
-
 
     static async  updatePost(postId: string,  updateData:UpdatePostType): Promise<boolean | null>{
        return  await PostRepository.updatePost(postId, updateData)
@@ -32,6 +31,4 @@ export class PostService{
        return await PostRepository.deletePost(id)
 
     }
-
-
 }

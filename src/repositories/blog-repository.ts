@@ -27,9 +27,7 @@ export class BlogRepository {
         }
 
         const newBlogToDb = new BlogModel(newBlog)
-
         await newBlogToDb.save()
-
         return BlogMapper.toDto({...newBlog, _id: newBlogToDb._id})
     }
 
