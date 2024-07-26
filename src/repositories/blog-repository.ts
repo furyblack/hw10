@@ -1,4 +1,4 @@
-import {blogCollection} from "../db/db";
+import {BlogModel} from "../db/db";
 import {CreateNewBlogType, UpdateBlogType} from "../types/blogs/input";
 import {BlogOutputType, BlogMongoDbType} from "../types/blogs/output";
 import {ObjectId, WithId} from "mongodb";
@@ -26,14 +26,16 @@ export class BlogRepository {
             createdAt: new Date()
         }
 
-        const res = await blogCollection.insertOne(newBlog)
+        const newBlogToDb = new BlogModel(newBlog)
 
-        return BlogMapper.toDto({...newBlog, _id: res.insertedId})
+        await newBlogToDb.save()
+
+        return BlogMapper.toDto({...newBlog, _id: newBlogToDb._id})
     }
 
     static async updateBlog(blogId: string, updateData: UpdateBlogType): Promise<boolean> {
 
-        const updateResult = await blogCollection.updateOne({_id: new ObjectId(blogId)}, {$set: {...updateData}})
+        const updateResult = await BlogModel.updateOne({_id: new ObjectId(blogId)}, {$set: {...updateData}})
         const updatedCount = updateResult.modifiedCount
         return !!updatedCount;
 
@@ -41,7 +43,7 @@ export class BlogRepository {
 
     static async deleteBlog(id: string): Promise<boolean> {
         try {
-            const result = await blogCollection.deleteOne({_id: new ObjectId(id)});
+            const result = await BlogModel.deleteOne({_id: new ObjectId(id)});
             return result.deletedCount === 1;
         } catch (error) {
             console.error("Error deleting blog:", error);

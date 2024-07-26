@@ -1,5 +1,5 @@
 import express, {Request, Response} from "express";
-import {blogCollection, postCollection, requestsCountCollection, sessionCollection, usersCollection} from "./db/db";
+import {postCollection, requestsCountCollection, sessionCollection, usersCollection} from "./db/db";
 import {postRoute} from "./routes/post-route";
 import {blogRoute} from "./routes/blog-route";
 import {usersRouter} from "./routes/users-router";
@@ -23,7 +23,7 @@ app.use('/security', deviceRouter)
 
 
 app.delete('/testing/all-data', async (req:Request, res: Response)=>{
-    await blogCollection.deleteMany({})
+    // await blogCollection.deleteMany({})
     await postCollection.deleteMany({})
     await usersCollection.deleteMany({})
     await sessionCollection.deleteMany({})
