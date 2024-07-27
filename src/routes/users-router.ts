@@ -20,9 +20,9 @@ usersRouter.get('/',  async (req: RequestWithQuery<userQuerySortData>, res: Resp
 
 
 usersRouter.post('/', authMiddleware, userValidation(), async (req: RequestWithBody<CreateNewUserType>, res: Response)=> {
-    const newCreatedUser: UserOutputType | null = await UsersService.createUser(req.body.login, req.body.email, req.body.password)
-    if(!newCreatedUser) return res.sendStatus(600)
-    return  res.status(201).send(newCreatedUser)
+    const userId: string = await UsersService.createUser(req.body.login, req.body.email, req.body.password)
+    const user = await UserQueryRepository.getById(userId)
+    return  res.status(201).send(user)
 })
 
 usersRouter.delete('/:id', authMiddleware, async (req: Request, res:Response) =>{

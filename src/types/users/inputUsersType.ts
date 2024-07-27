@@ -6,10 +6,10 @@ export type CreateNewUserType= {
     "email": string
 }
 
-export type UserAccountDBType = WithId<{
+export type UserAccountDBType ={
     accountData: UserAccountType,
     emailConfirmation: EmailConfirmationType
-}>
+}
 export type UserAccountType= {
     "email": string,
     "userName": string,

@@ -1,7 +1,7 @@
 import {CreateNewUserType, UserAccountDBType} from "./inputUsersType";
 import {v4 as uuidv4} from "uuid";
 import {add} from "date-fns";
-import {ObjectId} from "mongodb";
+import {ObjectId, WithId} from "mongodb";
 import bcrypt from "bcrypt";
 import {UserOutputType} from "./outputUserType";
 
@@ -32,7 +32,7 @@ export class UserFactory {
         const passwordSalt = await bcrypt.genSalt(10)
         const passwordHash = await this._generateHash(password, passwordSalt)
         return {
-            _id: new ObjectId(),
+
             accountData: {
                 userName: login,
                 email,
@@ -69,14 +69,5 @@ export class UserFactory {
                     minutes:30
                 })
         })
-    }
-
-    public static getViewModel(user: UserAccountDBType): UserOutputType {
-        return {
-            login : user.accountData.userName,
-            email: user.accountData.email,
-            createdAt: user.accountData.createdAt.toISOString(),
-            id : user._id.toString()
-        }
     }
 }

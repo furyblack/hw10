@@ -10,13 +10,13 @@ import {add} from 'date-fns';
 
 
 export const    UsersService = {
-    async createUser(login: string, email:string, password:string): Promise<UserOutputType | null>{
+    async createUser(login: string, email:string, password:string): Promise<string >{
 
         const newUser = await UserFactory
             .createConfirmedUser({login, password, email})
-
-        await UsersRepository.createUser(newUser)
-        return UserFactory.getViewModel(newUser)
+        console.log(newUser)
+        const userId =  await UsersRepository.createUser(newUser)
+        return userId
 
     },
 

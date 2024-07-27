@@ -1,12 +1,17 @@
-import {UserModel, usersCollection} from "../db/db";
+import {BlogModel, UserModel, usersCollection} from "../db/db";
 import {UserAccountDBType} from "../types/users/inputUsersType";
 import {ObjectId, WithId} from "mongodb";
+import {BlogMapper} from "./blog-repository";
 
 export class UsersRepository{
 
-    static async createUser(user: UserAccountDBType): Promise<void> {
-        const result = await UserModel.create(user);
-        return
+    static async createUser(user: UserAccountDBType): Promise<string> {
+
+
+        const newUserToDb = new UserModel(user)
+        await newUserToDb.save()
+        return newUserToDb._id.toString()
+
     }
 
     static async findByLoginOrEmail(loginOrEmail: string): Promise<WithId<UserAccountDBType> | null> {

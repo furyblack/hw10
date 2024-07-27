@@ -37,7 +37,6 @@ export const BlogModel = mongoose.model<BlogMongoDbType>('blogs', blogSchema)
 
 //СХЕМА И МОДЕЛЬ ЮЗЕРОВ
 export const userSchema = new mongoose.Schema({
-    _id:  {type: mongoose.Types.ObjectId, required: true},
     accountData: {
         userName:  {type: String, required: true},
         email:  {type: String, required: true},
@@ -45,9 +44,9 @@ export const userSchema = new mongoose.Schema({
         createdAt: {type: Date, required: true}
     },
     emailConfirmation: {
-        confirmationCode:  {type: String, required: true},
-        expirationDate:  {type: Date, required: true},
-        isConfirmed:  {type: Boolean, required: true},
+        confirmationCode:  {type: String},
+        expirationDate:  {type: Date},
+        isConfirmed:  {type: Boolean},
     }
 })
 export const UserModel = mongoose.model<UserAccountDBType>('users', userSchema)
