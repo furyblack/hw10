@@ -1,7 +1,7 @@
-import {BlogModel, UserModel, usersCollection} from "../db/db";
+import {UserModel} from "../db/db";
 import {UserAccountDBType} from "../types/users/inputUsersType";
 import {ObjectId, WithId} from "mongodb";
-import {BlogMapper} from "./blog-repository";
+
 
 export class UsersRepository{
 
@@ -23,8 +23,9 @@ export class UsersRepository{
 
     static async deleteUser(id: string): Promise<boolean> {
         try {
-            const result = await UserModel.deleteOne({ _id: new ObjectId(id) });
-            return result.deletedCount === 1;
+            const result = await UserModel.findByIdAndDelete(id)
+            if(result) return true
+            return false
         } catch (error) {
             console.error("Error deleting user", error);
             return false;
@@ -33,7 +34,7 @@ export class UsersRepository{
 
     static async findUserById(id: string): Promise<WithId<UserAccountDBType> | null> {
         try {
-            return UserModel.findOne({ _id: new ObjectId(id) });
+            return UserModel.findById(id)
         } catch (error) {
             console.error("Error deleting user", error);
             return null;
@@ -41,23 +42,22 @@ export class UsersRepository{
     }
 
     static async findByEmail(email: string): Promise<WithId<UserAccountDBType> | null> {
-        return await usersCollection.findOne({ "accountData.email": email });
+        return  UserModel.findOne({ "accountData.email": email });
 
     }
 
     static async updateConfirmation(_id: ObjectId) {
-        let result = await usersCollection.updateOne({ _id }, { $set: { 'emailConfirmation.isConfirmed': true } });
-        return result.modifiedCount === 1;
+        let result = await UserModel.findOneAndUpdate({_id:_id},{"emailConfirmation.isConfirmed": true});
+        if(result) return true
+        return false
     }
     static async updateConfirmationCode(userId: ObjectId, newCode: string, newExpirationDate: Date) {
-        await usersCollection.updateOne(
+        await UserModel.findOneAndUpdate(
             { _id: userId },
-            {
-                $set: {
+             {
                     'emailConfirmation.confirmationCode': newCode,
                     'emailConfirmation.expirationDate': newExpirationDate
                 }
-            }
         );
     }
 }

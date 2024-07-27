@@ -1,4 +1,3 @@
-import {WithId} from "mongodb";
 
 export type CreateNewUserType= {
     "login": string,

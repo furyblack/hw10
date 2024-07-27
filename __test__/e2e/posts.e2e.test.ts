@@ -3,7 +3,6 @@ import {app} from "../../src/settings";
 import {BlogOutputType} from "../../src/types/blogs/output";
 import {PostOutputType} from "../../src/types/posts/output";
 
-
 const incorrectPostData = {
     title: "",
     shortDescription: "",

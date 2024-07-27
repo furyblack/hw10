@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt';
-import {UserOutputType} from "../types/users/outputUserType";
 import {UsersRepository} from "../repositories/users-repository";
 import {WithId} from "mongodb";
 import {UserFactory} from "../types/users/User";
@@ -51,7 +50,9 @@ export const    UsersService = {
 
         const user:WithId<UserAccountDBType> | null = await UsersRepository.findByLoginOrEmail(loginOrEmail)
         if(!user) return null
+        console.log(user)
         const passwordHash = await this._generateHash(password, user.accountData.passwordSalt)
+
         if(user.accountData.passwordHash !== passwordHash){
            return  null
         }

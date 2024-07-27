@@ -1,19 +1,17 @@
 import * as dotenv from "dotenv";
 import { BlogMongoDbType} from "../types/blogs/output";
 import { PostMongoDbType} from "../types/posts/output";
-import {Collection, MongoClient, ObjectId} from "mongodb";
+import {Collection, MongoClient} from "mongodb";
 import {
     BlacklistedTokenType,
-    EmailConfirmationType,
     UserAccountDBType,
-    UserAccountType, UserMongoDbType
 } from "../types/users/inputUsersType";
 import {CommentMongoDbType} from "../types/comment/output-comment-type";
 import {requestCountType, SessionType} from "../types/session/sessionType";
 
 //пытаюсь подключить бд
 
-import mongoose from "mongoose";
+import mongoose, {Schema} from "mongoose";
 
 dotenv.config()
 const mongoUri = process.env.MONGO_URL as string || "mongodb://0.0.0.0:27017" // вытащили из енви строку  подключения
@@ -41,6 +39,7 @@ export const userSchema = new mongoose.Schema({
         userName:  {type: String, required: true},
         email:  {type: String, required: true},
         passwordHash:  {type: String, required: true},
+        passwordSalt:{type: String, required: true},
         createdAt: {type: Date, required: true}
     },
     emailConfirmation: {

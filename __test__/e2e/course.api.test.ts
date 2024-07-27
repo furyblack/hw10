@@ -1,9 +1,5 @@
-
 import request from 'supertest'
 import {app} from "../../src/settings";
-
-
-
 
 describe ('/videos', () =>{
     it('should return 200', () => {
@@ -17,7 +13,6 @@ describe ('/videos', () =>{
             .get('/videos/:id')
             .expect(200,)
     });
-
 
     it( 'should return 204', () =>{
         request(app)
@@ -36,9 +31,7 @@ describe ('/videos', () =>{
             .send({title:'title'})
             .send({author: 'string', })
             .expect(201)
-
     })
-
 })
 describe('/', () =>{
     it('should return f')

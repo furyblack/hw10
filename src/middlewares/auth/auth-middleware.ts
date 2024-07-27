@@ -1,7 +1,7 @@
 import { NextFunction, Response, Request } from 'express';
 import { jwtService } from "../../application/jwt-service";
 import { UsersRepository } from "../../repositories/users-repository";
-import {RequestCountModel, requestsCountCollection, UserModel, usersCollection} from "../../db/db";
+import {RequestCountModel, UserModel} from "../../db/db";
 import { body } from "express-validator";
 import { inputValidationMiddleware } from "../inputValidation/input-validation-middleware";
 import {SessionService} from "../../domain/session-service";
@@ -135,7 +135,7 @@ export const rateLimiterMiddlewave = async (req:Request, res: Response, next: Ne
     const url = req.originalUrl
     const currentTime = new Date()
     try {
-        //записываем текущий request в коллекцию
+        //записываем текущий request в коллекцию( теперь уже в модель)
         await RequestCountModel.create({
             ip,
             url,
