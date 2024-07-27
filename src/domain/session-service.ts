@@ -1,9 +1,8 @@
 import {SessionType, UpdateSessionType} from "../types/session/sessionType";
 import {SessionRepository} from "../repositories/session-repository";
-import {sessionCollection, SessionModel} from "../db/db";
+import {SessionModel} from "../db/db";
 
 export class SessionService {
-
 
     static async createSession(data: SessionType ) {
         const {ip, title, lastActiveDate, deviceId,userId} = data

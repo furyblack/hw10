@@ -1,4 +1,4 @@
-import {sessionCollection, SessionModel} from "../db/db";
+import {SessionModel} from "../db/db";
 
 export class QuerySessionRepository {
     static async getActiveDevises(userId:string, liveTime: number){

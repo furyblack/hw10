@@ -1,11 +1,7 @@
 import express, {Request, Response} from "express";
 import {
-    BlogModel,
-    postCollection, PostModel, RequestCountModel,
-    requestsCountCollection,
-    sessionCollection, SessionModel,
-    UserModel,
-    usersCollection
+    BlogModel, PostModel, RequestCountModel,
+     SessionModel, UserModel,
 } from "./db/db";
 import {postRoute} from "./routes/post-route";
 import {blogRoute} from "./routes/blog-route";

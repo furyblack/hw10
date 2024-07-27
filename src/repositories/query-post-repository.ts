@@ -1,11 +1,10 @@
 import {PostMongoDbType, PostOutputType, postSortData} from "../types/posts/output";
-import {commentCollection, CommentModel, postCollection, PostModel} from "../db/db";
+import {CommentModel, PostModel} from "../db/db";
 import {PostMapper} from "../domain/posts-service";
 import {PaginationOutputType} from "../types/blogs/output";
 import {ObjectId, SortDirection} from "mongodb";
 import {CommentMapper} from "../domain/comment-service";
 import {CommentOutputType} from "../types/comment/output-comment-type";
-
 
 
 export class QueryPostRepository {
@@ -37,7 +36,7 @@ export class QueryPostRepository {
         const search = {postId: postId}
         const post = await CommentModel
             .find(search)
-            .sort({ [sortBy]: sortDirection as SortDirection }) //был вариант(sortBy as keyof BlogOutputType, sortDirection as SortDirection))
+            .sort({ [sortBy]: sortDirection as SortDirection })
             .limit(pageSize)
             .skip((pageNumber - 1) * pageSize)
             .lean()

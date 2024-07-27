@@ -2,11 +2,9 @@ import {UserModel} from "../db/db";
 import {UserAccountDBType} from "../types/users/inputUsersType";
 import {ObjectId, WithId} from "mongodb";
 
-
 export class UsersRepository{
 
     static async createUser(user: UserAccountDBType): Promise<string> {
-
 
         const newUserToDb = new UserModel(user)
         await newUserToDb.save()

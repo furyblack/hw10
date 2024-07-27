@@ -1,6 +1,6 @@
 import {BlogMongoDbType, BlogOutputType, blogSortData, PaginationOutputType} from "../types/blogs/output";
 import {ObjectId, SortDirection, WithId} from "mongodb";
-import {BlogModel, postCollection, PostModel} from "../db/db";
+import {BlogModel, PostModel} from "../db/db";
 import {BlogMapper} from "./blog-repository";
 import {PostOutputType} from "../types/posts/output";
 import {PostMapper} from "./post-repository";
@@ -28,7 +28,6 @@ export class QueryBlogRepository {
             .skip((pageNumber - 1) * pageSize)
             .lean()
 
-
         // подсчёт элементов (может быть вынесено во вспомогательный метод)
         const totalCount = await PostModel.countDocuments(search)
 
@@ -43,7 +42,6 @@ export class QueryBlogRepository {
 
     }
 
-
     static async getAll(sortData: blogSortData): Promise<PaginationOutputType<BlogOutputType[]>> {
         const {pageSize, pageNumber, sortBy, sortDirection, searchNameTerm} = sortData
         const search = searchNameTerm
@@ -54,8 +52,7 @@ export class QueryBlogRepository {
             .sort({ [sortBy]: sortDirection as SortDirection }) //был вариант(sortBy as keyof BlogOutputType, sortDirection as SortDirection))
             .limit(pageSize)
             .skip((pageNumber - 1) * pageSize)
-            .lean() //было toarray
-
+            .lean()
 
         const totalCount = await BlogModel.countDocuments(search)
 

@@ -1,6 +1,6 @@
 import {CommentMongoDbType, CommentOutputType} from "../types/comment/output-comment-type";
 import {ObjectId, WithId} from "mongodb";
-import {commentCollection, CommentModel} from "../db/db";
+import {CommentModel} from "../db/db";
 import {UpdateCommentType} from "../types/comment/input-comment-type";
 import {QueryCommentRepository} from "./query-comment-repository";
 

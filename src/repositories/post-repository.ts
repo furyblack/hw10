@@ -1,4 +1,4 @@
-import {postCollection, PostModel} from "../db/db";
+import {PostModel} from "../db/db";
 import {CreateNewPostType, UpdatePostType} from "../types/posts/input";
 import {PostMongoDbType, PostOutputType} from "../types/posts/output";
 import {QueryPostRepository} from "./query-post-repository";

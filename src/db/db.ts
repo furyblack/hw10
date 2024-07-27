@@ -96,12 +96,12 @@ export const RequestCountModel = mongoose.model<requestCountType>('requestsCount
 
 
 // export const blogCollection: Collection<BlogMongoDbType> = mongoDb.collection<BlogMongoDbType>('blog')
-export const postCollection: Collection<PostMongoDbType> = mongoDb.collection<PostMongoDbType>('post')
-export const commentCollection: Collection<CommentMongoDbType> = mongoDb.collection<CommentMongoDbType>('comment')
-export const usersCollection: Collection<UserAccountDBType> = mongoDb.collection<UserAccountDBType>("user")
-export const refreshBlackListCollection: Collection<BlacklistedTokenType> = mongoDb.collection<BlacklistedTokenType>("blacklist")
-export const sessionCollection: Collection<SessionType> = mongoDb.collection<SessionType>("session")
-export const requestsCountCollection: Collection<requestCountType> = mongoDb.collection<requestCountType>('requests')
+// export const postCollection: Collection<PostMongoDbType> = mongoDb.collection<PostMongoDbType>('post')
+// export const commentCollection: Collection<CommentMongoDbType> = mongoDb.collection<CommentMongoDbType>('comment')
+// export const usersCollection: Collection<UserAccountDBType> = mongoDb.collection<UserAccountDBType>("user")
+// export const refreshBlackListCollection: Collection<BlacklistedTokenType> = mongoDb.collection<BlacklistedTokenType>("blacklist")
+// export const sessionCollection: Collection<SessionType> = mongoDb.collection<SessionType>("session")
+// export const requestsCountCollection: Collection<requestCountType> = mongoDb.collection<requestCountType>('requests')
 
 
 export async  function connectMongo (){

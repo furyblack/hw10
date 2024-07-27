@@ -1,9 +1,8 @@
 import { PaginationOutputType} from "../types/blogs/output";
-import {UserModel, usersCollection} from "../db/db";
+import {UserModel} from "../db/db";
 import {ObjectId, SortDirection, WithId} from "mongodb";
 import {UserOutputType, userSortData} from "../types/users/outputUserType";
-import {UserAccountDBType, UserMongoDbType} from "../types/users/inputUsersType";
-import {strict} from "node:assert";
+import {UserAccountDBType} from "../types/users/inputUsersType";
 
 
 export class UserMapper {
@@ -56,13 +55,9 @@ export class UserQueryRepository {
             totalCount,
             items: user.map(u => UserMapper.toDto(u))
         }
-
-
-
     }
     static async getById(id:string  ):Promise<UserOutputType | null>{
         const currentUser= await UserModel.findOne({_id:new ObjectId(id)})
         return currentUser? UserMapper.toDto(currentUser): null
     }
-
 }
