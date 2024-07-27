@@ -11,7 +11,6 @@ import {commentRouter} from "./routes/comment-router";
 import cookieParser from "cookie-parser";
 import {deviceRouter} from "./routes/device-router";
 
-
 export const app = express();
 
 // подключение роутеров
