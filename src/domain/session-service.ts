@@ -26,7 +26,6 @@ export class SessionService {
     static async updateSession(data: UpdateSessionType): Promise<void> {
         const {lastActiveDate, deviceId} = data;
 
-
         // ищу существующую сессию по deviceId
         const currentSession = await SessionRepository.findSessionByDeviceId(deviceId);
         if (!currentSession) {

@@ -19,7 +19,6 @@ export class CommentRepository {
     static async findById(commentId: string):Promise<WithId<CommentMongoDbType> | null>{
 
         return  CommentModel.findOne({_id: new ObjectId(commentId)})
-
     }
 
     static async createComment(commentParams:CommentMongoDbType):Promise<{commentId: string}>{
@@ -38,7 +37,6 @@ export class CommentRepository {
         const updateResult= await CommentModel.updateOne({_id: new ObjectId(commentId)},{$set:{...updateData}})
         const updatedCount = updateResult.modifiedCount
         return !!updatedCount;
-
     }
 
     static async deleteComment(id:string):Promise<boolean>{

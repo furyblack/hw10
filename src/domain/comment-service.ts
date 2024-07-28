@@ -2,8 +2,6 @@ import {CommentMongoDbType, CommentMongoDbTypeWithId, CommentOutputType} from ".
 import {CommentRepository} from "../repositories/comment-repository";
 import {PostRepository} from "../repositories/post-repository";
 
-
-
 export class CommentMapper{
     static toDto(comment:CommentMongoDbTypeWithId):CommentOutputType{
         return {
@@ -38,11 +36,8 @@ export class CommentService{
             },
             createdAt: new Date()
         }
-
-
         return   await CommentRepository.createComment(newComment)
 
     }
-
 
 }

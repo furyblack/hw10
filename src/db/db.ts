@@ -1,27 +1,20 @@
 import * as dotenv from "dotenv";
 import { BlogMongoDbType} from "../types/blogs/output";
 import { PostMongoDbType} from "../types/posts/output";
-import {Collection, MongoClient} from "mongodb";
-import {
-    BlacklistedTokenType,
-    UserAccountDBType,
-} from "../types/users/inputUsersType";
+import {MongoClient} from "mongodb";
+import {UserAccountDBType,} from "../types/users/inputUsersType";
 import {CommentMongoDbType} from "../types/comment/output-comment-type";
 import {requestCountType, SessionType} from "../types/session/sessionType";
 
 //пытаюсь подключить бд
-
 import mongoose, {Schema} from "mongoose";
 
 dotenv.config()
 const mongoUri = process.env.MONGO_URL as string || "mongodb://0.0.0.0:27017" // вытащили из енви строку  подключения
 
-
-
 export const client = new MongoClient(mongoUri);
 const dbName =  process.env.mongoDBName || "mongoose DB"
 const mongoDb = client.db(dbName)
-
 
 
 //СХЕМА И МОДЕЛЬ БЛОГОВ
@@ -86,7 +79,6 @@ export const SessionModel = mongoose.model<SessionType>('sessions', sessionSchem
 
 
 //СХЕМА И МОДЕЛЬ ДЛЯ REQUEST COUNT
-
 export const RequestCountSchema = new mongoose.Schema({
     ip: {type: String, required: true},
     url: {type: String, required: true},

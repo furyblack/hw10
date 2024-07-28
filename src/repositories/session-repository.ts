@@ -7,7 +7,7 @@ export class SessionRepository{
         await SessionModel.create(session)
     }
     static async findSessionByDeviceId(deviceId: string): Promise<SessionType | null> {
-        return await SessionModel.findOne({ deviceId });
+        return await SessionModel.findOne({ deviceId });//findOne({ deviceId });
     }
 
     static async updateSession(session: SessionType): Promise<void> {
@@ -17,7 +17,6 @@ export class SessionRepository{
         );
     }
     static async deleteSessionByDeviceId(deviceId: string): Promise<void> {
-        await SessionModel.deleteOne({ deviceId });
+        await SessionModel.findByIdAndDelete(deviceId);// было deleteOne({ deviceId });
     }
-
 }

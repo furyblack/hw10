@@ -1,12 +1,11 @@
 import {WithId} from "mongodb";
 import jwt from 'jsonwebtoken';
 import {UserAccountDBType} from "../types/users/inputUsersType";
-
 import {randomUUID} from "node:crypto";
 import {JwtPayload} from "../types/session/sessionType";
 import * as crypto from "crypto";
 
-//const refreshTokenSecret = 'your_refresh_token_secret';  было
+
 const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET || 'default_refresh_token_secret'; //стало
 export const refreshTokenExpiration = 6000;  // Время жизни refresh токена
 
@@ -34,7 +33,6 @@ export const jwtService={
         return  jwt.decode(token) as jwt.JwtPayload;
     },
 
-
     async getUserIdByToken(token:string){
         try {
             const result: any = jwt.verify(token, process.env.JWT_SECRET as string)
@@ -43,9 +41,6 @@ export const jwtService={
             return null
         }
     },
-
-
-
 
     async getUserIdByRefreshToken(token: string) {
         try {

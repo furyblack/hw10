@@ -68,7 +68,6 @@ export const    UsersService = {
     async resendConfirmationEmail(email: string): Promise<void> {
         const user = await this.findUserByEmail(email);
 
-
         const newCode = uuidv4();
         const newExpirationDate = add(new Date(), { minutes: 30 });
 

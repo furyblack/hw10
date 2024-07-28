@@ -7,7 +7,6 @@ import {BlogOutputType} from "../types/blogs/output";
 
 export class BlogsService {
 
-
     static async createPostToBlog(data: CreateNewPostType) {
         const {title, shortDescription, content, blogId} = data
         // Создаем новый пост для конкретного блога
@@ -30,7 +29,6 @@ export class BlogsService {
         })
         return newBlog
     }
-
 
     static async deleteBlog(id: string): Promise<boolean> {
         return await BlogRepository.deleteBlog(id)
