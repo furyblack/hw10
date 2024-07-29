@@ -1,5 +1,6 @@
 import {agent as request} from 'supertest'
 import {app} from "../../src/settings";
+import mongoose from "mongoose";
 
 const incorrectUserData = {
     login: "",
@@ -18,8 +19,14 @@ const userCreateData = {
 let user;
 
 describe('users', ()=>{
+    const mongoURI = 'mongodb://0.0.0.0:27017/home_works'
     beforeAll(async  ()=>{
         await request(app).delete('/testing/all-data')
+        await mongoose.connect(mongoURI)
+    })
+    afterAll(async () => {
+        /* Closing database connection after each test. */
+        await mongoose.connection.close()
     })
     it('should create user with correct input data', async ()=>{
         const createResponse=  await request(app)

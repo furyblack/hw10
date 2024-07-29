@@ -8,10 +8,11 @@ import { CurrentUserType } from "../types/users/outputUserType";
 import {
     authMiddlewareBearer, authMiddlewareRefresh,
     emailResendingValidation, rateLimiterMiddlewave,
-    registrationValidation,
+    registrationValidation, uniqEmailValidator,
 } from "../middlewares/auth/auth-middleware";
 import { loginzationValidation } from "../validators/user-validators";
 import {SessionService} from "../domain/session-service";
+import {inputValidationMiddleware} from "../middlewares/inputValidation/input-validation-middleware";
 
 
 export const authRouter = Router({});
@@ -94,14 +95,6 @@ authRouter.post('/logout', authMiddlewareRefresh, async (req: Request, res: Resp
     await SessionService.deleteSessionByDeviceId(decoded.deviceId);
     res.clearCookie('refreshToken');
     res.sendStatus(204)
-    // try {
-    //     // Добавляем refresh токен в черный список и удаляем его из куки
-    //     await jwtService.revokeRefreshToken(refreshToken);
-    //     res.clearCookie('refreshToken');
-    //     res.sendStatus(204); // No Content
-    // } catch (error) {
-    //     res.sendStatus(401); // Unauthorized
-    // }
 });
 
 // Endpoint для получения информации о текущем пользователе
@@ -141,3 +134,14 @@ authRouter.post('/registration-email-resending', rateLimiterMiddlewave, emailRes
     await UsersService.resendConfirmationEmail(email);
     res.sendStatus(204); // No Content
 });
+
+authRouter.post('/password-recovery', rateLimiterMiddlewave, uniqEmailValidator, inputValidationMiddleware, async (req: Request, res: Response) =>{
+    const { email } = req.body;
+    const result = await UsersService.initiatePasswordRecovery(email);
+    if (!result) {
+        res.status(400).send({ errorsMessages: [{ message: 'Invalid email', field: "email" }] });
+        return;
+    }
+    res.sendStatus(204); // No Content
+})
+

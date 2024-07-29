@@ -78,5 +78,31 @@ export const    UsersService = {
             "Registration confirmation",
             `To finish registration please follow the link below:\nhttps://some-front.com/confirm-registration?code=${newCode}`
         );
+    },
+
+    async initiatePasswordRecovery(email: string): Promise<boolean> {
+        const user = await UsersRepository.findByEmail(email);
+        if (!user) {
+            // Если email не зарегистрирован, возвращаем true для предотвращения раскрытия информации
+            return true;
+        }
+
+        const recoveryCode = uuidv4();
+        const expirationDate = add(new Date(), { hours: 1 });
+
+        await UsersRepository.updateRecoveryCode(user._id, recoveryCode, expirationDate);
+
+        try {
+            await nodemailerService.sendEmail(
+                email,
+                "Password Recovery",
+                `To recover your password, please use the following code:\n${recoveryCode}`
+            );
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+
+        return true;
     }
 }

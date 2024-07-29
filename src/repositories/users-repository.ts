@@ -41,7 +41,6 @@ export class UsersRepository{
 
     static async findByEmail(email: string): Promise<WithId<UserAccountDBType> | null> {
         return  UserModel.findOne({ "accountData.email": email });
-
     }
 
     static async updateConfirmation(_id: ObjectId) {
@@ -56,6 +55,15 @@ export class UsersRepository{
                     'emailConfirmation.confirmationCode': newCode,
                     'emailConfirmation.expirationDate': newExpirationDate
                 }
+        );
+    }
+    static async updateRecoveryCode(userId: ObjectId, recoveryCode: string, expirationDate: Date): Promise<void> {
+        await UserModel.findByIdAndUpdate(
+            userId,
+            {
+                "recoveryCode.code": recoveryCode,
+                "recoveryCode.expirationDate": expirationDate
+            }
         );
     }
 }
