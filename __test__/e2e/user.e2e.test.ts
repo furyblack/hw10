@@ -19,10 +19,11 @@ const userCreateData = {
 let user;
 
 describe('users', ()=>{
-    const mongoURI = 'mongodb://0.0.0.0:27017/home_works'
+    const mongoURI = 'mongodb+srv://miha:miha2016!@cluster0.expiegq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
     beforeAll(async  ()=>{
-        await request(app).delete('/testing/all-data')
-        await mongoose.connect(mongoURI)
+
+        await mongoose.connect(mongoURI, {dbName:'testUser'})
+
     })
     afterAll(async () => {
         /* Closing database connection after each test. */

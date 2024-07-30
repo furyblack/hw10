@@ -51,8 +51,14 @@ export const uniqEmailValidator = body("email")
         return true;
     });
 
+export const emailValidator = body("email")
+    .isEmail()
+    .withMessage('Email is not valid');
+
+//проверка на уникальность осуществлять в сервиссах,
+
 // Валидатор для пароля
-const passwordValidator = body('password')
+export const passwordValidator = body('password')
     .isString().withMessage('Password must be a string')
     .trim().isLength({ min: 6, max: 20 }).withMessage('Incorrect password');
 
@@ -162,6 +168,18 @@ export const rateLimiterMiddlewave = async (req:Request, res: Response, next: Ne
         res.status(500).send('server error')
     }
 }
+
+
+
+export const passwordRecoveryValidation = () => {
+    return [
+        body('newPassword').isString().isLength({ min: 6, max: 20 }).withMessage('Password length should be between 6 and 20 characters'),
+        body('recoveryCode').isString().withMessage('Recovery code must be a string')
+    ];
+}
+
+
+
 
 
 // Функция для валидации при регистрации

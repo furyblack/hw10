@@ -7,12 +7,13 @@ import { WithId } from "mongodb";
 import { CurrentUserType } from "../types/users/outputUserType";
 import {
     authMiddlewareBearer, authMiddlewareRefresh,
-    emailResendingValidation, rateLimiterMiddlewave,
+    emailResendingValidation, emailValidator, passwordRecoveryValidation, passwordValidator, rateLimiterMiddlewave,
     registrationValidation, uniqEmailValidator,
 } from "../middlewares/auth/auth-middleware";
 import { loginzationValidation } from "../validators/user-validators";
 import {SessionService} from "../domain/session-service";
 import {inputValidationMiddleware} from "../middlewares/inputValidation/input-validation-middleware";
+import {UserModel} from "../db/db";
 
 
 export const authRouter = Router({});
@@ -135,7 +136,7 @@ authRouter.post('/registration-email-resending', rateLimiterMiddlewave, emailRes
     res.sendStatus(204); // No Content
 });
 
-authRouter.post('/password-recovery', rateLimiterMiddlewave, uniqEmailValidator, inputValidationMiddleware, async (req: Request, res: Response) =>{
+authRouter.post('/password-recovery', rateLimiterMiddlewave, emailValidator, inputValidationMiddleware, async (req: Request, res: Response) =>{
     const { email } = req.body;
     const result = await UsersService.initiatePasswordRecovery(email);
     if (!result) {
@@ -145,3 +146,15 @@ authRouter.post('/password-recovery', rateLimiterMiddlewave, uniqEmailValidator,
     res.sendStatus(204); // No Content
 })
 
+authRouter.post('/new-password', rateLimiterMiddlewave, passwordRecoveryValidation(), async (req: RequestWithBody<{
+    newPassword: string, recoveryCode: string
+}>, res: Response)=>{
+    const { newPassword, recoveryCode } = req.body;
+    const result = await UsersService.confirmPasswordRecovery(newPassword, recoveryCode)
+
+    if(!result){
+        res.status(400).send({errorsMessages: [{message:'invalid recovery code or recovery code has ex[ired', field:'recoveryCode'}]})
+        return
+    }
+    res.sendStatus(204)
+})

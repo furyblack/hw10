@@ -66,4 +66,22 @@ export class UsersRepository{
             }
         );
     }
+
+    static async findUserByRecoveryCode(recoveryCode: string): Promise<WithId<UserAccountDBType> | null> {
+        return UserModel.findOne({ "recoveryCode.code": recoveryCode });
+    }
+
+    static async updatePassword(userId: ObjectId, passwordHash: string, passwordSalt: string): Promise<void> {
+        await UserModel.findByIdAndUpdate(userId, {
+            "accountData.passwordHash": passwordHash,
+            "accountData.passwordSalt": passwordSalt
+        });
+    }
+
+    static async clearRecoveryCode(userId: ObjectId): Promise<void> {
+        await UserModel.findByIdAndUpdate(userId, {
+            "recoveryCode.code": null,
+            "recoveryCode.expirationDate": null
+        });
+    }
 }

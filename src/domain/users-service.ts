@@ -79,11 +79,10 @@ export const    UsersService = {
             `To finish registration please follow the link below:\nhttps://some-front.com/confirm-registration?code=${newCode}`
         );
     },
-
+    //Восстановление пароля при помощи отправки письма
     async initiatePasswordRecovery(email: string): Promise<boolean> {
         const user = await UsersRepository.findByEmail(email);
         if (!user) {
-            // Если email не зарегистрирован, возвращаем true для предотвращения раскрытия информации
             return true;
         }
 
@@ -104,5 +103,19 @@ export const    UsersService = {
         }
 
         return true;
+    },
+
+    async confirmPasswordRecovery(newPassword: string, recoveryCode: string): Promise<boolean> {
+        const user = await UsersRepository.findUserByRecoveryCode(recoveryCode);
+        if (!user ) return false; // не сработал || user.recoveryCode.expirationDate < new Date()
+
+        const passwordSalt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash(newPassword, passwordSalt);
+
+        await UsersRepository.updatePassword(user._id, passwordHash, passwordSalt);
+        await UsersRepository.clearRecoveryCode(user._id);
+
+        return true;
     }
+
 }
