@@ -14,8 +14,7 @@ export const    UsersService = {
         const newUser = await UserFactory
             .createConfirmedUser({login, password, email})
         console.log(newUser)
-        const userId =  await UsersRepository.createUser(newUser)
-        return userId
+        return await UsersRepository.createUser(newUser)
 
     },
 
@@ -107,7 +106,7 @@ export const    UsersService = {
 
     async confirmPasswordRecovery(newPassword: string, recoveryCode: string): Promise<boolean> {
         const user = await UsersRepository.findUserByRecoveryCode(recoveryCode);
-        if (!user || user.recoveryCode.expirationDate < new Date()) return false; // не сработал
+        if (!user || user.recoveryCode.expirationDate < new Date()) return false;
 
         const passwordSalt = await bcrypt.genSalt(10);
         const passwordHash = await bcrypt.hash(newPassword, passwordSalt);

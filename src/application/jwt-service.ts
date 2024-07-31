@@ -20,7 +20,7 @@ export const jwtService={
     async createRefreshToken(user: WithId<UserAccountDBType>) {
         // await new Promise(resolve => setTimeout(resolve, 100));
         const deviceId = randomUUID()
-        //TODO изучить запись строк
+
         return jwt.sign({ userId: user._id, deviceId, noise:crypto.randomUUID() }, refreshTokenSecret, { expiresIn: `${refreshTokenExpiration}s` });
     },
     async createRefreshTokenWithDeveceID(user: WithId<UserAccountDBType >, deviceId:string) {
@@ -44,8 +44,7 @@ export const jwtService={
 
     async getUserIdByRefreshToken(token: string) {
         try {
-            const result = jwt.verify(token, refreshTokenSecret) as JwtPayload //заменить на нормальный тип payload ..написал еще один тип и пропиал его тут
-            return result
+            return jwt.verify(token, refreshTokenSecret) as JwtPayload
         } catch (error) {
             return null;
         }

@@ -7,13 +7,12 @@ import { WithId } from "mongodb";
 import { CurrentUserType } from "../types/users/outputUserType";
 import {
     authMiddlewareBearer, authMiddlewareRefresh,
-    emailResendingValidation, emailValidator, passwordRecoveryValidation, passwordValidator, rateLimiterMiddlewave,
-    registrationValidation, uniqEmailValidator,
+    emailResendingValidation, emailValidator, passwordRecoveryValidation, rateLimiterMiddlewave,
+    registrationValidation,
 } from "../middlewares/auth/auth-middleware";
 import { loginzationValidation } from "../validators/user-validators";
 import {SessionService} from "../domain/session-service";
 import {inputValidationMiddleware} from "../middlewares/inputValidation/input-validation-middleware";
-import {UserModel} from "../db/db";
 
 
 export const authRouter = Router({});

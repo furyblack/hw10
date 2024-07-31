@@ -170,14 +170,12 @@ export const rateLimiterMiddlewave = async (req:Request, res: Response, next: Ne
 }
 
 
-
 export const passwordRecoveryValidation = () => {
     return [
         body('newPassword').isString().isLength({ min: 6, max: 20 }).withMessage('Password length should be between 6 and 20 characters'),
         body('recoveryCode').isString().withMessage('Recovery code must be a string')
     ];
 }
-
 
 
 // Функция для валидации при регистрации

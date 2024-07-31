@@ -31,13 +31,6 @@ describe('blogs', ()=>{
             expect(createResponse.body.description).toEqual(blogCreateData.description)
             expect(createResponse.body.websiteUrl).toEqual(blogCreateData.websiteUrl)
             expect(createResponse.body.id).toEqual(expect.any(String))
-        //Вариант от Ксюши попробовать)
-        // expect(createResponse.body).toEqual({
-        //     name: '',
-        //     description: '',
-        //
-        // })
-
 
             //записываем данные полученного блога
         blog = createResponse.body
@@ -86,10 +79,9 @@ describe('blogs', ()=>{
             .auth("admin", "qwerty")
             .send(blogUpdateData)
             .expect(204)
-    })//TODO не хватает по свагеру
+    })
 
-    //get by id
-    //resBlog(updated) !== created
+
 
     it('shouldn"t update blog with correct input data and incorrect blogId', async ()=>{
         await request(app)
@@ -130,7 +122,7 @@ describe('blogs', ()=>{
         expect(createResponse.body.id).toEqual(expect.any(String))
         blog = createResponse.body
     })
-        //TODO делит епта
+
     it('shouldn"t delete blog by id wihtout auth ', async ()=>{
         await request(app)
             .delete('/blogs/' + blog!.id)

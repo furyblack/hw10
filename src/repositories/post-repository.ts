@@ -20,7 +20,6 @@ export class PostMapper{
 }
 
 export class PostRepository{
-    //TODO вынести мапинг в квери репу
     static async createPost(postParams: CreateNewPostType): Promise<PostOutputType | null>{
         const targetBlog = await QueryBlogRepository.getById(postParams.blogId)
         if (!targetBlog){
@@ -40,7 +39,6 @@ export class PostRepository{
         await newPostToDb.save()
         return PostMapper.toDto({...newPost, _id:newPostToDb._id})
     }
-
 
     static async  updatePost(postId: string,  updateData:UpdatePostType): Promise<boolean | null>{
        const post = await QueryPostRepository.getById(postId)

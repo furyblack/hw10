@@ -7,7 +7,7 @@ import {CommentMongoDbType} from "../types/comment/output-comment-type";
 import {requestCountType, SessionType} from "../types/session/sessionType";
 
 //пытаюсь подключить бд
-import mongoose, {Schema} from "mongoose";
+import mongoose from "mongoose";
 
 dotenv.config()
 const mongoUri = process.env.MONGO_URL as string // вытащили из енви строку  подключения
