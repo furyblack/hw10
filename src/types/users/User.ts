@@ -43,8 +43,12 @@ export class UserFactory {
                 confirmationCode,
                 expirationDate,
                 isConfirmed
-            }
+            },
+            recoveryCode: {
+            code:'',
+            expirationDate: new Date()}
         }
+
     }
 
     public static async createConfirmedUser({login, password, email} : CreateNewUserType) {

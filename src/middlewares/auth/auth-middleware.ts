@@ -180,8 +180,6 @@ export const passwordRecoveryValidation = () => {
 
 
 
-
-
 // Функция для валидации при регистрации
 export const registrationValidation = () => [
     uniqEmailValidator,

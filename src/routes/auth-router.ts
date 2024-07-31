@@ -146,14 +146,14 @@ authRouter.post('/password-recovery', rateLimiterMiddlewave, emailValidator, inp
     res.sendStatus(204); // No Content
 })
 
-authRouter.post('/new-password', rateLimiterMiddlewave, passwordRecoveryValidation(), async (req: RequestWithBody<{
+authRouter.post('/new-password', rateLimiterMiddlewave, passwordRecoveryValidation(), inputValidationMiddleware, async (req: RequestWithBody<{
     newPassword: string, recoveryCode: string
 }>, res: Response)=>{
     const { newPassword, recoveryCode } = req.body;
     const result = await UsersService.confirmPasswordRecovery(newPassword, recoveryCode)
 
     if(!result){
-        res.status(400).send({errorsMessages: [{message:'invalid recovery code or recovery code has ex[ired', field:'recoveryCode'}]})
+        res.status(400).send({errorsMessages: [{message:'invalid recovery code or recovery code has expired', field:'recoveryCode'}]})
         return
     }
     res.sendStatus(204)

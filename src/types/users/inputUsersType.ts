@@ -1,3 +1,4 @@
+import {validate} from "uuid/index";
 
 export type CreateNewUserType= {
     "login": string,
@@ -7,7 +8,8 @@ export type CreateNewUserType= {
 
 export type UserAccountDBType ={
     accountData: UserAccountType,
-    emailConfirmation: EmailConfirmationType
+    emailConfirmation: EmailConfirmationType,
+    recoveryCode: RecoveryCode
 }
 export type UserAccountType= {
     "email": string,
@@ -20,6 +22,10 @@ export type EmailConfirmationType= {
     "isConfirmed": boolean,
     "confirmationCode": string | null,
     "expirationDate": Date | null
+}
+export type RecoveryCode = {
+        code:string,
+        expirationDate: Date
 }
 
 export type LoginUserType= {

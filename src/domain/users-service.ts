@@ -95,7 +95,7 @@ export const    UsersService = {
             await nodemailerService.sendEmail(
                 email,
                 "Password Recovery",
-                `To recover your password, please use the following code:\n${recoveryCode}`
+                recoveryCode
             );
         } catch (e) {
             console.log(e);
@@ -107,7 +107,7 @@ export const    UsersService = {
 
     async confirmPasswordRecovery(newPassword: string, recoveryCode: string): Promise<boolean> {
         const user = await UsersRepository.findUserByRecoveryCode(recoveryCode);
-        if (!user ) return false; // не сработал || user.recoveryCode.expirationDate < new Date()
+        if (!user || user.recoveryCode.expirationDate < new Date()) return false; // не сработал
 
         const passwordSalt = await bcrypt.genSalt(10);
         const passwordHash = await bcrypt.hash(newPassword, passwordSalt);
