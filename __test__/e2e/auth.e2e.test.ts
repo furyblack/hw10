@@ -1,5 +1,7 @@
-import request from "supertest";
+import {agent as request} from 'supertest'
 import {app} from "../../src/settings";
+import mongoose from "mongoose";
+
 
 const userCreateData = {
     login: "testtt",
@@ -11,7 +13,9 @@ let user;
 let firstRefreshToken: any;
 
 describe('/auth', () => {
+    const mongoURI = 'mongodb+srv://miha:miha2016!@cluster0.expiegq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
     beforeAll(async () => {
+        await mongoose.connect(mongoURI, {dbName:'testUser'})
         await request(app).delete('/testing/all-data');
     });
 
