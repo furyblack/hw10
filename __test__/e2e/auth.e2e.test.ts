@@ -16,8 +16,12 @@ describe('/auth', () => {
     const mongoURI = 'mongodb+srv://miha:miha2016!@cluster0.expiegq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
     beforeAll(async () => {
         await mongoose.connect(mongoURI, {dbName:'testUser'})
-        await request(app).delete('/testing/all-data');
+
     });
+    afterAll(async () => {
+        /* Closing database connection after each test. */
+        await mongoose.connection.close()
+    })
 
     it('should create user with correct input data', async () => {
         const createResponse = await request(app)
