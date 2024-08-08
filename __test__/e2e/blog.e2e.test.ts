@@ -1,5 +1,6 @@
 import request from 'supertest'
 import {app} from "../../src/settings";
+import mongoose from "mongoose";
 
 const incorrectBlogData = {
     name: "",
@@ -21,6 +22,15 @@ const blogUpdateData = {
 let blog;
 
 describe('blogs', ()=>{
+    const mongoURI = 'mongodb+srv://miha:miha2016!@cluster0.expiegq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+    beforeAll(async () => {
+        await mongoose.connect(mongoURI, {dbName:'testUser'})
+
+    });
+    afterAll(async () => {
+        /* Closing database connection after each test. */
+        await mongoose.connection.close()
+    })
     it('should create blog with correct input data', async ()=>{
         const createResponse=  await request(app)
             .post('/blogs')
