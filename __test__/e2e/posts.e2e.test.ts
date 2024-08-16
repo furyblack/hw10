@@ -33,7 +33,6 @@ const blogCreateData = {
 let post: PostOutputType
 let blog: BlogOutputType
 
-
 describe('posts e2e test', () => {
     describe('blogs', ()=> {
 
